@@ -27,20 +27,7 @@ module Jekyll
       def encode_image
         require 'open-uri'
         require 'base64'
-        
-        encoded_image = ''
-
-        if self.cached_base64_codes.has_key? @url
-          encoded_image = self.cached_base64_codes[@url]
-        else
-          # p "Caching #{@url} as local base64 string ..."
-          open(@url) do |image|
-            encoded_image = Base64.encode64(image.read)
-          end
-          self.cached_base64_codes.merge!(@url => encoded_image)
-        end
-        
-        "data:image;base64, #{encoded_image}"
+		Base64.strict_encode64(File.binread("ggb/template4.ggb"))
       end
     end
   end
