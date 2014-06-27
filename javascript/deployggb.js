@@ -1092,7 +1092,7 @@ var GGBApplet = function() {
         previewContainer.style.border = "1px solid "+borderColor;
 
         var preview = document.createElement("img");
-        preview.style.position = "relative";
+        preview.style.position = "absolute";
         preview.style.zIndex = "1000";
         preview.style.top = "-1px"; // Move up/left to hide the border on the image
         preview.style.left = "-1px";
@@ -1105,17 +1105,8 @@ var GGBApplet = function() {
             previewLoading.style.zIndex = "1001";
             previewLoading.style.opacity = 1.0;
             previewLoading.setAttribute("src", previewLoadingPath);
-            var pWidth = 360;
-            if (pWidth > (oriWidth/4*3)) {
-                var pWidth = oriWidth/4*3;
-            }
-            var pHeight = pWidth/5.8;
-            var pX = (oriWidth - pWidth) / 2;
-            var pY = (oriHeight - pHeight) / 2;
-            previewLoading.style.left = pX + "px";
-            previewLoading.style.top = pY + "px";
-            previewLoading.setAttribute("width", pWidth-4);
-            previewLoading.setAttribute("height", pHeight-4);
+            previewLoading.setAttribute("width", 640);
+            previewLoading.setAttribute("height", 480);
             previewContainer.appendChild(previewLoading);
         }
 

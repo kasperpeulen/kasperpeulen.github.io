@@ -17,10 +17,13 @@ h1 {
 	margin: 12pt;
 	padding: 10pt;
 	border-radius: 10pt;
-	display: inline-block;
-	visibility: hidden;
+	display: none;
+
 }
 
+div.toolbar_button {
+	isselected: false ;
+}
 .redoButton {
     width: 30px !important;
 }
