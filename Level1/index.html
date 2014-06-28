@@ -54,6 +54,8 @@ ga('linker:autoLink', ['neocities.org', 'euclidthegame.org'] );
 </div>
 
 <script type="text/javascript">
+
+
 function ggbOnInit() {
   var element = document.getElementsByClassName("toolbar_button")[0]; 
   element.setAttribute("isselected", "false"); 
@@ -61,13 +63,34 @@ function ggbOnInit() {
   ggbApplet.registerAddListener("newObjectListener");
   function Command(cmd){ggbApplet.debug(cmd); ggbApplet.evalCommand(cmd);}
   Command('Progress1 = Text["Progress: 0%", (0.10972, -0.32915)]');
+  Command ('count0 = Text["Count = 0", (8.5,-0.32915)]');
+	
+
 }
 
+  function Command(cmd){ggbApplet.debug(cmd); ggbApplet.evalCommand(cmd);}
+  	var count = 'Text["Count = 0", (8.5,-0.32915)]'
 function newObjectListener(obj) {
     if (ggbApplet.getObjectType(obj) == "segment" || ggbApplet.getObjectType(obj) == "circle" || ggbApplet.getObjectType(obj) == "ray") {
 ggbApplet.setColor(obj,255,204,102);
 }
+
   function Command(cmd){ggbApplet.debug(cmd); ggbApplet.evalCommand(cmd);}
+
+
+
+var cmdString = ggbApplet.getCommandString(obj);
+if (cmdString.substring(0,3) == "Ray" || cmdString.substring(0,2) == "Eq" || cmdString.substring(0,3) == "Seg" ||cmdString.substring(0,3) == "Cir" || cmdString.substring(0,3) == "Mid" || cmdString.substring(0,13) == "AngleBisector" || cmdString.substring(0,4) == "Perp" || cmdString.substring(0,4) == "Line" || cmdString.substring(0,5) == "Trans"){
+	var countint = parseInt(count.substring(count.lastIndexOf("=")+2,count.lastIndexOf('"'))) + 1;
+	var countstr = countint.toString();
+	if (ggbApplet.getVisible("count0")){
+	ggbApplet.setVisible("count0",false);
+	countstr = "1"
+	}
+	count = 'count = Text["Count = '+countstr+'", (8.5,-0.32915)]';
+	Command(count);
+
+}
   // this functions can check all general objects
   function checkobject(target) {
     if (obj != "finished") {
