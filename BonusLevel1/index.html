@@ -32,8 +32,12 @@ ga('linker:autoLink', ['neocities.org', 'euclidthegame.org'] );
       <p id="goal">
 	<b>Goal:</b> Construct a regular hexagon given one side AB.
 </p>
+
 <p id="winningimg">
 <img src="http://i.snag.gy/EBDZu.jpg"/ >
+</p>
+<p id="level">
+Well done !
 </p>
 <script type="text/javascript">
 	    var parameters = {"id":"ggbApplet","width":640,"height":480,"showToolBar":true,"showMenuBar":false,"showAlgebraInput":false,"showResetIcon":true,"enableLabelDrags":false,"enableShiftDragZoom":true,"enableRightClick":true, "showToolBarHelp":false,"errorDialogsActive":true,"useBrowserForJS":true, "language":"en","isPreloader":false,"screenshotGenerator":false,"preventFocus":false};
@@ -175,9 +179,32 @@ checksegment("segmentLT");
 checksegment("segmentRT");
 checksegment("segmentT");
 
-if (drawn("segmentLT") && drawn("segmentRT") && drawn("segmentLB") && drawn("segmentRB") && drawn("segmentT")){
+if (drawn("pointC"))
+{
    setVisible("Progress1",false);
-   Command('Progress4 = Text["Progress: 100%", (0.10972, -0.32915)]');
+   Command('Progress = Text["Progress: 10%", (0.10972, -0.32915)]');   
+}
+
+if (drawn("segmentLT") + drawn("segmentRT") + drawn("segmentLB") + drawn("segmentRB") + drawn("segmentT") === 1){
+   setVisible("Progress",false);
+   Command('Progress2 = Text["Progress: 20%", (0.10972, -0.32915)]');   
+}
+
+if (drawn("segmentLT") + drawn("segmentRT") + drawn("segmentLB") + drawn("segmentRB") + drawn("segmentT") === 2){
+   setVisible("Progress2",false);
+   Command('Progress3 = Text["Progress: 40%", (0.10972, -0.32915)]');   
+}
+
+if (drawn("segmentLT") + drawn("segmentRT") + drawn("segmentLB") + drawn("segmentRB") + drawn("segmentT") === 3){
+   Command('Progress3 = Text["Progress: 60%", (0.10972, -0.32915)]');   
+}
+if (drawn("segmentLT") + drawn("segmentRT") + drawn("segmentLB") + drawn("segmentRB") + drawn("segmentT") === 4){
+   Command('Progress3 = Text["Progress: 80%", (0.10972, -0.32915)]');   
+}
+
+
+if (drawn("segmentLT") && drawn("segmentRT") && drawn("segmentLB") && drawn("segmentRB") && drawn("segmentT")){
+   Command('Progress3 = Text["Progress: 100%", (0.10972, -0.32915)]');
    Command('Complete = Text["Level completed !", (1.52038, -1.36364)]');   
    
    document.getElementById("level").style.display="inline-block";
