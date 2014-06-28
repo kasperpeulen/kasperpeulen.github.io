@@ -65,7 +65,7 @@ function ggbOnInit() {
   ggbApplet.debug("ggbOnInit");
   ggbApplet.registerAddListener("newObjectListener");
   function Command(cmd){ggbApplet.debug(cmd); ggbApplet.evalCommand(cmd);}
-  Command('Progress1 = Text["Progress: 0%",Corner[4] + (0.010972*(x(Corner[3])-x(Corner[4])), -0.32915)]');
+  Command('Progress1 = Text["Progress: 0%",Corner[4] + (0.10972, -0.32915)]');
   Command ('count0 = Text["Count = 0", Corner[4] + (.85*(x(Corner[3])-x(Corner[4])),-0.32915)]');
 	
 
@@ -169,29 +169,33 @@ checksegment("segmentT");
 if (drawn("pointC"))
 {
    setVisible("Progress1",false);
-   Command('Progress = Text["Progress: 10%", (0.10972, -0.32915)]');   
+   Command('Progress2 = Text["Progress: 10%", (0.10972, -0.32915)]');   
 }
 
 if (drawn("segmentLT") + drawn("segmentRT") + drawn("segmentLB") + drawn("segmentRB") + drawn("segmentT") === 1){
-   setVisible("Progress",false);
-   Command('Progress2 = Text["Progress: 20%", (0.10972, -0.32915)]');   
+   setVisible("Progress2",false);
+   Command('Progress3 = Text["Progress: 20%", (0.10972, -0.32915)]');   
 }
 
 if (drawn("segmentLT") + drawn("segmentRT") + drawn("segmentLB") + drawn("segmentRB") + drawn("segmentT") === 2){
-   setVisible("Progress2",false);
-   Command('Progress3 = Text["Progress: 40%", (0.10972, -0.32915)]');   
+   setVisible("Progress3",false);
+   Command('Progress4 = Text["Progress: 40%", (0.10972, -0.32915)]');   
 }
 
 if (drawn("segmentLT") + drawn("segmentRT") + drawn("segmentLB") + drawn("segmentRB") + drawn("segmentT") === 3){
-   Command('Progress3 = Text["Progress: 60%", (0.10972, -0.32915)]');   
+setVisible("Progress4",false); 
+   Command('Progress5 = Text["Progress: 60%", (0.10972, -0.32915)]');   
 }
 if (drawn("segmentLT") + drawn("segmentRT") + drawn("segmentLB") + drawn("segmentRB") + drawn("segmentT") === 4){
-   Command('Progress3 = Text["Progress: 80%", (0.10972, -0.32915)]');   
+    setVisible("Progress5",false); 
+	Command('Progress6 = Text["Progress: 80%", (0.10972, -0.32915)]');   
 }
 
 
 if (drawn("segmentLT") && drawn("segmentRT") && drawn("segmentLB") && drawn("segmentRB") && drawn("segmentT")){
-   Command('Progress3 = Text["Progress: 100%", (0.10972, -0.32915)]');
+         setVisible("Progress6",false);
+		
+   Command('Progress7 = Text["Progress: 100%", (0.10972, -0.32915)]');
    Command('Complete = Text["Level completed !", (1.52038, -1.36364)]');   
    
    document.getElementById("level").style.display="inline-block";
