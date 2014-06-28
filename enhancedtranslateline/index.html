@@ -62,14 +62,23 @@ function ggbOnInit() {
   ggbApplet.debug("ggbOnInit");
   ggbApplet.registerAddListener("newObjectListener");
   function Command(cmd){ggbApplet.debug(cmd); ggbApplet.evalCommand(cmd);}
-  Command('Progress1 = Text["Progress: 0%",Corner[4] + (0.10972, -0.32915)]');
-  Command ('count0 = Text["Count = 0", Corner[4] + (.85*(x(Corner[3])-x(Corner[4])),-0.32915)]');
+  function abspos(x,y){
+  console.log("Corner[4] + (0.85*(x(Corner[3])-x(Corner[4])),-0.32915)");
+  return "Corner[4] + ("+x+"*(x(Corner[3])-x(Corner[4])),"+y+"*(x(Corner[2])-x(Corner[1])))"
+  }
+  
+  Command('Progress1 = Text["Progress: 0%",'+abspos("0.011","-0.032915")+']');
+  Command ('count0 = Text["Count = 0",'+abspos("0.85","-0.032915")+']');
 	
 
 }
 
   function Command(cmd){ggbApplet.debug(cmd); ggbApplet.evalCommand(cmd);}
-  	var count = 'Text["Count = 0", Corner[4] + (8.5/(x(Corner[4])-x(Corner[3])),-0.32915)]'
+    function abspos(x,y){
+  console.log("Corner[4] + (0.85*(x(Corner[3])-x(Corner[4])),-0.32915)");
+  return "Corner[4] + ("+x+"*(x(Corner[3])-x(Corner[4])),"+y+"*(x(Corner[2])-x(Corner[1])))"
+  }
+  	var count = 'Text["Count = 0",'+abspos("0.85","-0.032915")+']'
 function newObjectListener(obj) {
 if (ggbApplet.getObjectType(obj) === "boolean")
 {return;
@@ -81,7 +90,10 @@ ggbApplet.setColor(obj,255,204,102);
 
   function Command(cmd){ggbApplet.debug(cmd); ggbApplet.evalCommand(cmd);}
 
-  
+    function abspos(x,y){
+  console.log("Corner[4] + (0.85*(x(Corner[3])-x(Corner[4])),-0.32915)");
+  return "Corner[4] + ("+x+"*(x(Corner[3])-x(Corner[4])),"+y+"*(x(Corner[2])-x(Corner[1])))"
+  }
 var cmdString = ggbApplet.getCommandString(obj);
 console.log(cmdString);
 if (cmdString.substring(0,3) == "Ray" || (cmdString.substring(0,2) == "Eq" && ggbApplet.getObjectType(obj)=="point") || cmdString.substring(0,3) == "Seg" ||cmdString.substring(0,3) == "Cir" || cmdString.substring(0,3) == "Mid" || cmdString.substring(0,13) == "AngleBisector" || cmdString.substring(0,4) == "Perp" || cmdString.substring(0,4) == "Line" || cmdString.substring(0,5) == "Trans"){
@@ -91,7 +103,7 @@ if (cmdString.substring(0,3) == "Ray" || (cmdString.substring(0,2) == "Eq" && gg
 	ggbApplet.setVisible("count0",false);
 	countstr = "1"
 	}
-	count = 'count = Text["Count = '+countstr+'", Corner[4] + (8.5,-0.32915)]';
+	count = 'count = Text["Count = '+countstr+'", '+abspos("0.85","-0.032915")+']';
 	Command(count);
 
 }
