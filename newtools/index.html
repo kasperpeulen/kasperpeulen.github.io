@@ -62,14 +62,14 @@ function ggbOnInit() {
   ggbApplet.debug("ggbOnInit");
   ggbApplet.registerAddListener("newObjectListener");
   function Command(cmd){ggbApplet.debug(cmd); ggbApplet.evalCommand(cmd);}
-  Command('Progress1 = Text["Progress: 0%", (0.10972, -0.32915)]');
-  Command ('count0 = Text["Count = 0", (8.5,-0.32915)]');
+  Command('Progress1 = Text["Progress: 0%",Corner[4] + (0.010972*(x(Corner[3])-x(Corner[4])), -0.32915)]');
+  Command ('count0 = Text["Count = 0", Corner[4] + (.85*(x(Corner[3])-x(Corner[4])),-0.32915)]');
 	
 
 }
 
   function Command(cmd){ggbApplet.debug(cmd); ggbApplet.evalCommand(cmd);}
-  	var count = 'Text["Count = 0", (8.5,-0.32915)]'
+  	var count = 'Text["Count = 0", Corner[4] + (8.5/(x(Corner[4])-x(Corner[3])),-0.32915)]'
 function newObjectListener(obj) {
 if (ggbApplet.getObjectType(obj) === "boolean")
 {return;
@@ -91,7 +91,7 @@ if (cmdString.substring(0,3) == "Ray" || (cmdString.substring(0,2) == "Eq" && gg
 	ggbApplet.setVisible("count0",false);
 	countstr = "1"
 	}
-	count = 'count = Text["Count = '+countstr+'", (8.5,-0.32915)]';
+	count = 'count = Text["Count = '+countstr+'", Corner[4] + (8.5,-0.32915)]';
 	Command(count);
 
 }
@@ -108,27 +108,10 @@ if (cmdString.substring(0,3) == "Ray" || (cmdString.substring(0,2) == "Eq" && gg
   // this functions check line segments
   function checksegment(target) {
     if (ggbApplet.getObjectType(obj) == "segment") {
-      //gives beginpoint and enpoint of object
-      var objectcmd = ggbApplet.getCommandString(obj);
-	  var openbracket = objectcmd.indexOf('[') + 1;
-	  var comma1 = objectcmd.indexOf(',');
-	  var comma2 = objectcmd.indexOf(',',comma1+1);
-          var vec1=objectcmd.substring(openbracket, comma1);
-          var vec2="";
-if (comma2 != -1){vec2=objectcmd.substring(comma1+1, comma2)};
-	  var closebracket = objectcmd.indexOf(']');
-	  var endpointobject = objectcmd.substring(Math.max(comma1,comma2) + 1, closebracket);
-         if (comma2==-1){  beginpointobject = objectcmd.substring(openbracket, comma1);}
-              else {  beginpointobject = vec2+"-"+vec1+"+"+endpointobject;};
-
-
-      //gives beginpoint and endpoint of target
-      var targetcmd = ggbApplet.getCommandString(target); 
-	  var openbracket = targetcmd.indexOf('[') + 1;
-	  var comma = targetcmd.indexOf(',');
-	  var closebracket = targetcmd.indexOf(']');
-	  var beginpointtarget = targetcmd.substring(openbracket, comma);
-	  var endpointtarget = targetcmd.substring(comma + 1, closebracket);
+  	  var beginpointobject = "Point["+obj+",0]"
+	  var endpointobject = "Point["+obj+",1]"
+	  var beginpointtarget = "Point["+target+",0]"
+	  var endpointtarget = "Point["+target+",1]"
       //here it checks if endpoints of line segment are equal
       if (obj != "finished") {
         Command("finished =((("+beginpointobject+"=="+beginpointtarget+")||("+beginpointobject+"=="+endpointtarget+"))&&(("+endpointobject+"=="+beginpointtarget+")||("+endpointobject+"=="+endpointtarget+")))");
