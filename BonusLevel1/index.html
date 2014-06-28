@@ -74,6 +74,10 @@ function ggbOnInit() {
   function Command(cmd){ggbApplet.debug(cmd); ggbApplet.evalCommand(cmd);}
   	var count = 'Text["Count = 0", (8.5,-0.32915)]'
 function newObjectListener(obj) {
+if (ggbApplet.getObjectType(obj) === "boolean")
+{return;
+}
+
     if (ggbApplet.getObjectType(obj) == "segment" || ggbApplet.getObjectType(obj) == "circle" || ggbApplet.getObjectType(obj) == "ray") {
 ggbApplet.setColor(obj,255,204,102);
 }
