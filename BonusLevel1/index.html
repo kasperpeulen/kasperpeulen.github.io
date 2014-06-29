@@ -3,14 +3,15 @@
 
   <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Bonus Level 1</title>
+    <title>Euclid: The Game - Bonus Level 1</title>
     <meta name="description" content="This website tries to gamify The Elements a book written by Euclid.">
     <link rel="canonical" href="http://euclidthegame.org/BonusLevel1/">
 
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="/css/main.css">
+
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 	<script type="text/javascript" src="/javascript/deployggb.js"></script>
+    <link rel="stylesheet" href="/css/main.css">
 </head>
 
 
@@ -36,9 +37,13 @@ ga('linker:autoLink', ['neocities.org', 'euclidthegame.org'] );
 <p id="winningimg">
 <img src="http://i.snag.gy/EBDZu.jpg"/ >
 </p>
-<p id="level">
-Go to bonus <a href="/BonusLevel2/">level 2</a> !
-</p>
+
+<div id="hiddiv" style="display: none">
+    <p id="level">
+Go to bonus <a href="/Level2/">level 2</a> !
+        </p>
+    </div>
+
 <script type="text/javascript">
 	    var parameters = {"id":"ggbApplet","width":640,"height":480,"showToolBar":true,"showMenuBar":false,"showAlgebraInput":false,"showResetIcon":true,"enableLabelDrags":false,"enableShiftDragZoom":true,"enableRightClick":true, "showToolBarHelp":false,"errorDialogsActive":true,"useBrowserForJS":true, "language":"en","isPreloader":false,"screenshotGenerator":false,"preventFocus":false};
     /** is3D=is 3D applet using 3D view, AV=Algebra View, SV=Spreadsheet View, CV=CAS View, EV2=Graphics View 2, CP=Construction Protocol, PC=Probability Calculator, DA=Data Analysis, FI=Function Inspector, PV=Python, macro=Macro View */
@@ -60,6 +65,9 @@ Go to bonus <a href="/BonusLevel2/">level 2</a> !
 
 
 function ggbOnInit() {
+	var begindate = new Date();
+	var begintime = begindate.getTime();
+	Command('begintime ='+begintime+'')
   var element = document.getElementsByClassName("toolbar_button")[0]; 
   element.setAttribute("isselected", "false"); 
   ggbApplet.debug("ggbOnInit");
@@ -68,12 +76,14 @@ function ggbOnInit() {
   function abspos(x,y){
   return "Corner[4] + ("+x+"*(x(Corner[3])-x(Corner[4])),"+y+"*(x(Corner[2])-x(Corner[1])))"
   }
-  
-  Command('Progress1 = Text["Progress: 0%",'+abspos("0.011","-0.032915")+']');
+  Command('progress = 0');
+  Command('Progresstext = Text["Progress: "progress"%",'+abspos("0.011","-0.032915")+']');
   Command ('count0 = Text["Count = 0",'+abspos("0.85","-0.032915")+']');
-	
-
-}
+	Command('W = (-10,-10)'); 
+	ggbApplet.setVisible("W",false);
+	Command('welldone = Text["Well done!", W]'); 		
+	ggbApplet.setVisible("welldone",false);	
+	}
 
   function Command(cmd){ggbApplet.debug(cmd); ggbApplet.evalCommand(cmd);}
     function abspos(x,y){
@@ -81,9 +91,13 @@ function ggbOnInit() {
   }
   	var count = 'Text["Count = 0",'+abspos("0.85","-0.032915")+']'
 function newObjectListener(obj) {
-if (ggbApplet.getObjectType(obj) === "boolean")
+if (ggbApplet.getObjectType(obj) === "boolean" || ggbApplet.getObjectType(obj) === "text" || ggbApplet.getObjectType(obj) === "numeric"|| obj == "W")
 {return;
 }
+
+
+console.log(ggbApplet.getObjectNumber());
+console.log(ggbApplet.getObjectType(obj));
 
     if (ggbApplet.getObjectType(obj) == "segment" || ggbApplet.getObjectType(obj) == "circle" || ggbApplet.getObjectType(obj) == "ray") {
 ggbApplet.setColor(obj,255,204,102);
@@ -106,18 +120,37 @@ if (cmdString.substring(0,3) == "Ray" || (cmdString.substring(0,2) == "Eq" && gg
 	Command(count);
 
 }
+
+
+
+function getCoord(obj){ 
+	if (ggbApplet.getObjectType(obj) === "point") {
+	var x = ggbApplet.getXcoord(obj);
+	var y = ggbApplet.getYcoord(obj);
+		return "("+x+","+y+")"}
+	else if (ggbApplet.getObjectType(obj)==="segment"){
+	Command("xx = x(Point["+obj+",0.5])");
+	Command("yy = y(Point["+obj+",0.5])");
+	var x = ggbApplet.getValue("xx");
+	var y = ggbApplet.getValue("yy");
+	return "("+x+","+y+")";
+	}
+}
+
   // this functions can check all general objects
-  function checkobject(target) {
+  function checkobject(target,x,y) {
     if (obj != "finished") {
       Command("finished = (" + obj + "== " + target + ")");
       finished = ggbApplet.getValueString("finished");
       if (finished.indexOf("true") > -1) {
 	  Command('f_'+target+'= Text["", (0,0)]');
+	  Command("W = "+getCoord(target)+"+("+x+","+y+")");
+		ggbApplet.setVisible("welldone",true);		  
       } 
     }
   }
   // this functions check line segments
-  function checksegment(target) {
+  function checksegment(target,x,y) {
     if (ggbApplet.getObjectType(obj) == "segment") {
   	  var beginpointobject = "Point["+obj+",0]"
 	  var endpointobject = "Point["+obj+",1]"
@@ -129,31 +162,41 @@ if (cmdString.substring(0,3) == "Ray" || (cmdString.substring(0,2) == "Eq" && gg
         finished = ggbApplet.getValueString("finished");
       if (finished.indexOf("true") > -1) {
 	  Command('f_'+target+'= Text["", (0,0)]');
+	  if (typeof x !== 'undefined'){
+  	  Command("W = "+getCoord(target)+"+("+x+","+y+")")};	
+		ggbApplet.setVisible("welldone",true);		  
       }
      			     }
    							 }
  					}
    // this functions can check if line segment has right direction
-  function checksegmentdirection(target) {
+ 
+ function checkdirection(target,x,y) {
     if (ggbApplet.getObjectType(obj) == "segment" || ggbApplet.getObjectType(obj) == "ray" || ggbApplet.getObjectType(obj) == "line") {
     if (obj != "finished") {
       Command("finished = (("+obj+"(1)=="+target+"(1))&&("+obj+"(-1)=="+target+"(-1)))");
       finished = ggbApplet.getValueString("finished");
       if (finished.indexOf("true") > -1) {
 	  Command('f_'+target+'= Text["", (0,0)]');
+	  	  if (typeof x !== 'undefined'){
+  	  Command("W = "+getCoord(target)+"+("+x+","+y+")")};	
+		ggbApplet.setVisible("welldone",true);		
       }
     }
-  }
+	}
   }
   // this functions check if the new point is on the targetline
-  function checkpointontarget(target) {
+  function checkpointontarget(target,x,y) {
     if (ggbApplet.getObjectType(obj) == "point") {
     if (obj != "finished") {
       Command("finished = ("+target+"(x("+obj+"))==y("+obj+"))");
       finished = ggbApplet.getValueString("finished");
       if (finished.indexOf("true") > -1) {
-	  Command('f_'+target+'= Text["", (0,0)]');
-      }
+	  Command('f_p'+target+'= Text["", (0,0)]');
+	  	  if (typeof x !== 'undefined'){
+  	  Command("W = "+getCoord(target)+"+("+x+","+y+")")};	
+		ggbApplet.setVisible("welldone",true);		 
+ }
     }
   }
   }
@@ -163,60 +206,64 @@ function drawn(object){
 }
 var setVisible = ggbApplet.setVisible;
 
+function LevelCompleted(condition,mincount){
+ if(condition){
+	var enddate = new Date();
+	var endtime = enddate.getTime();
+	var time = (endtime - ggbApplet.getValue('begintime'))/1000;
+ 	Command('progress = 100');
+	Command('Complete = Text["Level completed !",  '+abspos("0.15","-0.13")+']');   
+    var countint = Math.round(mincount*1000/(parseInt(count.substring(count.lastIndexOf("=")+2,count.lastIndexOf('"'))))- time) ;
+    Command('score = Text["Score: '+countint+'", '+abspos("0.85","-0.062915")+']');     
+   //document.getElementById("level").style.display="inline-block";	
+     $( "#hidden" ).slideDown( 1000 );	
+	}
+}   
 
-checkobject("pointC");
-checkobject("pointLT");
-checkobject("pointR");
-checkobject("pointRT");
+
+checkobject("pointC",-0.5,0.5);
+checkobject("pointLT",0.2,0);
+checkobject("pointR",0.2,0);
+checkobject("pointRT",1,0);
+checkobject("pointLT",-1.2,0);
+checkobject("pointL",-1.2,0);
 checksegment("segmentLB");
 checksegment("segmentRB");
 checksegment("segmentLT");
 checksegment("segmentRT");
 checksegment("segmentT");
-console.log(countstr);
+
+
 if (drawn("pointC"))
 {
-   setVisible("Progress1",false);
-   Command('Progress2 = Text["Progress: 10%", '+abspos("0.011","-0.032915")+']');   
-   Command('welldone1 = Text["Well done !", pointC +(0.3,0)]');      
+	Command('progress = 10');
    }
 
 if (drawn("segmentLT") + drawn("segmentRT") + drawn("segmentLB") + drawn("segmentRB") + drawn("segmentT") === 1){
-   setVisible("Progress2",false);
-   Command('Progress3 = Text["Progress: 20%", '+abspos("0.011","-0.032915")+']');   
-   Command('welldone2 = Text["Well done !", Point[segmentRB,0] +(0.3,0)]');      
+	Command('progress = 20');
 }
 
 if (drawn("segmentLT") + drawn("segmentRT") + drawn("segmentLB") + drawn("segmentRB") + drawn("segmentT") === 2){
-   setVisible("Progress3",false);
-   Command('Progress4 = Text["Progress: 40%", '+abspos("0.011","-0.032915")+']');   
-   Command('welldone3 = Text["Well done !", Point[segmentLT,1] +(0.3,0)]');        
+	Command('progress = 40');  
 }
 
 if (drawn("segmentLT") + drawn("segmentRT") + drawn("segmentLB") + drawn("segmentRB") + drawn("segmentT") === 3){
-setVisible("Progress4",false); 
-   Command('Progress5 = Text["Progress: 60%", '+abspos("0.011","-0.032915")+']');   
-   Command('welldone4 = Text["Well done !", Point[segmentLT,0] +(0.3,0)]');           
+	Command('progress = 60');   
 }
 if (drawn("segmentLT") + drawn("segmentRT") + drawn("segmentLB") + drawn("segmentRB") + drawn("segmentT") === 4){
-    setVisible("Progress5",false); 
-	Command('Progress6 = Text["Progress: 80%", '+abspos("0.011","-0.032915")+']');   
-   Command('welldone5 = Text["Well done !", Point[segmentRT,0] +(0.3,0)]');           	
+	Command('progress = 80');         	
 }
 console.log(countstr);
 
 if (drawn("segmentLT") && drawn("segmentRT") && drawn("segmentLB") && drawn("segmentRB") && drawn("segmentT")){
-         setVisible("Progress6",false);
-		
-   Command('Progress7 = Text["Progress: 100%", '+abspos("0.011","-0.032915")+']');
+	Command('progress = 100');
    Command('Complete = Text["Level completed !", (1.52038, -1.36364)]');   
    
    var countint = Math.round(5832/(parseInt(count.substring(count.lastIndexOf("=")+2,count.lastIndexOf('"')))));
    
     Command('score = Text["Score: '+countint+'", '+abspos("0.85","-0.062915")+']');     
-   document.getElementById("level").style.display="inline-block";
+     $( "#hiddiv" ).slideDown( 1000 );
 	}
-
 }
 </script>
 

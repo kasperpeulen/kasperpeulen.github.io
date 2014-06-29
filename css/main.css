@@ -17,8 +17,12 @@ h1 {
 	margin: 12pt;
 	padding: 10pt;
 	border-radius: 10pt;
-	display: none;
+	display: inline-block;
 
+}
+#applet_container{
+min-width : 640 px;
+min-height: 480px;
 }
 
 div.toolbar_button {
