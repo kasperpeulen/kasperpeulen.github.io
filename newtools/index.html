@@ -8,10 +8,9 @@
     <link rel="canonical" href="http://euclidthegame.org/newtools/">
 
     <!-- Custom CSS -->
-
+    <link rel="stylesheet" href="/css/main.css">
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 	<script type="text/javascript" src="/javascript/deployggb.js"></script>
-    <link rel="stylesheet" href="/css/main.css">
 </head>
 
 
@@ -66,14 +65,12 @@ function ggbOnInit() {
   function abspos(x,y){
   return "Corner[4] + ("+x+"*(x(Corner[3])-x(Corner[4])),"+y+"*(x(Corner[2])-x(Corner[1])))"
   }
-  Command('progress = 0');
-  Command('Progresstext = Text["Progress: "progress"%",'+abspos("0.011","-0.032915")+']');
+  
+  Command('Progress1 = Text["Progress: 0%",'+abspos("0.011","-0.032915")+']');
   Command ('count0 = Text["Count = 0",'+abspos("0.85","-0.032915")+']');
-	Command('W = (-10,-10)'); 
-	ggbApplet.setVisible("W",false);
-	Command('welldone = Text["Good move !", W]'); 		
 	
-	}
+
+}
 
   function Command(cmd){ggbApplet.debug(cmd); ggbApplet.evalCommand(cmd);}
     function abspos(x,y){
@@ -81,11 +78,9 @@ function ggbOnInit() {
   }
   	var count = 'Text["Count = 0",'+abspos("0.85","-0.032915")+']'
 function newObjectListener(obj) {
-if (ggbApplet.getObjectType(obj) === "boolean" || ggbApplet.getObjectType(obj) === "text" || ggbApplet.getObjectType(obj) === "numeric")
+if (ggbApplet.getObjectType(obj) === "boolean")
 {return;
 }
-console.log(obj);
-console.log(ggbApplet.getObjectType(obj));
 
     if (ggbApplet.getObjectType(obj) == "segment" || ggbApplet.getObjectType(obj) == "circle" || ggbApplet.getObjectType(obj) == "ray") {
 ggbApplet.setColor(obj,255,204,102);
@@ -109,18 +104,17 @@ if (cmdString.substring(0,3) == "Ray" || (cmdString.substring(0,2) == "Eq" && gg
 
 }
   // this functions can check all general objects
-  function checkobject(target,x,y) {
+  function checkobject(target) {
     if (obj != "finished") {
       Command("finished = (" + obj + "== " + target + ")");
       finished = ggbApplet.getValueString("finished");
       if (finished.indexOf("true") > -1) {
 	  Command('f_'+target+'= Text["", (0,0)]');
-	  Command("W = "+getCoord(target)+"+("+x+","+y+")");	  
       } 
     }
   }
   // this functions check line segments
-  function checksegment(target,x,y) {
+  function checksegment(target) {
     if (ggbApplet.getObjectType(obj) == "segment") {
   	  var beginpointobject = "Point["+obj+",0]"
 	  var endpointobject = "Point["+obj+",1]"
@@ -132,7 +126,6 @@ if (cmdString.substring(0,3) == "Ray" || (cmdString.substring(0,2) == "Eq" && gg
         finished = ggbApplet.getValueString("finished");
       if (finished.indexOf("true") > -1) {
 	  Command('f_'+target+'= Text["", (0,0)]');
-  	  Command("W = "+getCoord(target)+"+("+x+","+y+")");	
       }
      			     }
    							 }

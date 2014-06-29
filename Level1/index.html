@@ -8,10 +8,9 @@
     <link rel="canonical" href="http://euclidthegame.org/Level1/">
 
     <!-- Custom CSS -->
-
+    <link rel="stylesheet" href="/css/main.css">
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 	<script type="text/javascript" src="/javascript/deployggb.js"></script>
-    <link rel="stylesheet" href="/css/main.css">
 </head>
 
 
@@ -32,10 +31,6 @@ ga('linker:autoLink', ['neocities.org', 'euclidthegame.org'] );
 
       <p id="goal">
 	<b>Goal:</b> Construct an equilateral triangle such that the segment AB is one of its sides.
-</p>
-
-<p id="winningimg">
-<img src="/img/Level1.png"/ >
 </p>
 <p id="level">
 	You unlocked a new tool: Constructing equilateral triangles!
@@ -70,14 +65,12 @@ function ggbOnInit() {
   function abspos(x,y){
   return "Corner[4] + ("+x+"*(x(Corner[3])-x(Corner[4])),"+y+"*(x(Corner[2])-x(Corner[1])))"
   }
-  Command('progress = 0');
-  Command('Progresstext = Text["Progress: "progress"%",'+abspos("0.011","-0.032915")+']');
+  
+  Command('Progress1 = Text["Progress: 0%",'+abspos("0.011","-0.032915")+']');
   Command ('count0 = Text["Count = 0",'+abspos("0.85","-0.032915")+']');
-	Command('W = (-10,-10)'); 
-	ggbApplet.setVisible("W",false);
-	Command('welldone = Text["Good move !", W]'); 		
 	
-	}
+
+}
 
   function Command(cmd){ggbApplet.debug(cmd); ggbApplet.evalCommand(cmd);}
     function abspos(x,y){
@@ -85,11 +78,9 @@ function ggbOnInit() {
   }
   	var count = 'Text["Count = 0",'+abspos("0.85","-0.032915")+']'
 function newObjectListener(obj) {
-if (ggbApplet.getObjectType(obj) === "boolean" || ggbApplet.getObjectType(obj) === "text" || ggbApplet.getObjectType(obj) === "numeric")
+if (ggbApplet.getObjectType(obj) === "boolean")
 {return;
 }
-console.log(obj);
-console.log(ggbApplet.getObjectType(obj));
 
     if (ggbApplet.getObjectType(obj) == "segment" || ggbApplet.getObjectType(obj) == "circle" || ggbApplet.getObjectType(obj) == "ray") {
 ggbApplet.setColor(obj,255,204,102);
@@ -113,18 +104,17 @@ if (cmdString.substring(0,3) == "Ray" || (cmdString.substring(0,2) == "Eq" && gg
 
 }
   // this functions can check all general objects
-  function checkobject(target,x,y) {
+  function checkobject(target) {
     if (obj != "finished") {
       Command("finished = (" + obj + "== " + target + ")");
       finished = ggbApplet.getValueString("finished");
       if (finished.indexOf("true") > -1) {
 	  Command('f_'+target+'= Text["", (0,0)]');
-	  Command("W = "+getCoord(target)+"+("+x+","+y+")");	  
       } 
     }
   }
   // this functions check line segments
-  function checksegment(target,x,y) {
+  function checksegment(target) {
     if (ggbApplet.getObjectType(obj) == "segment") {
   	  var beginpointobject = "Point["+obj+",0]"
 	  var endpointobject = "Point["+obj+",1]"
@@ -136,7 +126,6 @@ if (cmdString.substring(0,3) == "Ray" || (cmdString.substring(0,2) == "Eq" && gg
         finished = ggbApplet.getValueString("finished");
       if (finished.indexOf("true") > -1) {
 	  Command('f_'+target+'= Text["", (0,0)]');
-  	  Command("W = "+getCoord(target)+"+("+x+","+y+")");	
       }
      			     }
    							 }
@@ -172,48 +161,30 @@ function drawn(object){
 var setVisible = ggbApplet.setVisible;
 
 
-checkobject("pointtop",-0.4,0.3);
-checkobject("pointbottom",-0.4,-0.3);
-//checkobject("circleleft");
-//checkobject("circleright");
-checksegment("segmentLB",-1.1,0);
-checksegment("segmentRB",0,0);
-checksegment("segmentLT",-1.1,0);
-checksegment("segmentRT",0,0);
+checkobject("pointtop");
+checkobject("pointbottom");
+checkobject("circleleft");
+checkobject("circleright");
+checksegment("segmentLB");
+checksegment("segmentRB");
+checksegment("segmentLT");
+checksegment("segmentRT");
 
-
-function getCoord(obj){ 
-	if (ggbApplet.getObjectType(obj) === "point") {
-	var x = ggbApplet.getXcoord(obj);
-	var y = ggbApplet.getYcoord(obj);
-		return "("+x+","+y+")"}
-	else if (ggbApplet.getObjectType(obj)==="segment"){
-	Command("xx = x(Point["+obj+",0.5])");
-	Command("yy = y(Point["+obj+",0.5])");
-	var x = ggbApplet.getValue("xx");
-	var y = ggbApplet.getValue("yy");
-	return "("+x+","+y+")";
-	}
-}
-
-
-	
 if (drawn("pointtop") || drawn("pointbottom")) {  
-	Command('progress = 33');
+	setVisible("Progress1", false);
+    Command('Progress2 = Text["Progress: 33%", Corner[4] + (0.10972, -0.32915)]');
 	}
 
 if (drawn("segmentLT") || drawn("segmentLB") || drawn("segmentRB") ||  drawn("segmentRT")){
-	Command('progress = 66');
+   setVisible("Progress2", false);
+    Command('Progress3 = Text["Progress: 66%", Corner[4] + (0.10972, -0.32915)]');
    }
 
 if ((drawn("segmentLT") && drawn("segmentRT")) || (drawn("segmentLB") && drawn("segmentRB"))){
-	Command('progress = 100');
-    Command('Complete = Text["Level completed !",  Corner[4] +  (1.52038, -1.36364)]');   
-   var countint = Math.round(3990/(parseInt(count.substring(count.lastIndexOf("=")+2,count.lastIndexOf('"')))));
-   
-    Command('score = Text["Score: '+countint+'", '+abspos("0.85","-0.062915")+']');     
-   //document.getElementById("level").style.display="inline-block";	
-     $( "#level" ).slideDown( 1000 );
+   setVisible("Progress3", false);
+   Command('Progress4 = Text["Progress: 100%", Corner[4] +  (0.10972, -0.32915)]');
+   Command('Complete = Text["Level completed !",  Corner[4] +  (1.52038, -1.36364)]');   
+   document.getElementById("level").style.display="inline-block";
 	}
 }
 </script>
