@@ -10,7 +10,7 @@ h1 {
 	margin: 0 0 0.4em 0;
 	line-height: 1em;
 }
-#disqus_thread{ display:none;}
+#disqus_thread{}
 
 #level {
 	background-color: #e5eecc;
