@@ -200,7 +200,10 @@ if (drawn("segmentB") + drawn("segmentLB") + drawn("segmentRB") + drawn("segment
 if (drawn("segmentB") && drawn("segmentLB") && drawn("segmentRB") && drawn("segmentRT") && drawn("segmentLT")){
    Command('Progress3 = Text["Progress: 100%", '+abspos("0.011","-0.032915")+']');
    Command('Complete = Text["Level completed !", (1.52038, -1.36364)]');   
- 
+   
+   var countint = Math.round(9832/(parseInt(count.substring(count.lastIndexOf("=")+2,count.lastIndexOf('"')))));
+   
+    Command('score = Text["Score: '+countint+'", '+abspos("0.85","-0.062915")+']');     
    document.getElementById("level").style.display="inline-block";
 	}
 
